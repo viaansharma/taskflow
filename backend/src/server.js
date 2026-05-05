@@ -15,8 +15,12 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/users', require('./routes/users'));
 
-// Health check
-app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+// Health check (fixed to /api/health)
+app.get('/api/health', (req, res) => res.json({ 
+  status: 'ok', 
+  timestamp: new Date(),
+  mongodb: mongoose.connection.readyState === 1 
+}));
 
 // Connect DB & Start
 const PORT = process.env.PORT || 5001;
@@ -25,7 +29,7 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/taskfl
 mongoose.connect(MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB connected');
-    app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+    app.listen(PORT, '0.0.0.0', () => console.log(`🚀 Server running on port ${PORT}`));
   })
   .catch(err => {
     console.error('MongoDB connection error:', err);
