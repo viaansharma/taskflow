@@ -1,8 +1,8 @@
 [build]
-builder = "NIXPACKS"
+builder = "RAILPACK"
 buildCommand = "npm run build"
 
 [deploy]
-startCommand = "npx serve -s build -l 3000"
+startCommand = "npx serve -s build -l tcp://0.0.0.0:$PORT"
 healthcheckPath = "/"
 healthcheckTimeout = 30
